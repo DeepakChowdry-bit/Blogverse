@@ -43,7 +43,7 @@ const page = () => {
   };
   return (
     <>
-      <div className="flex items-center justify-center py-6">
+      <div className="flex items-center justify-center py-6 min-h-screen">
         <div className="flex flex-col justify-between w-11/12 md:w-10/12">
           <div>
             <Card className="w-full">
