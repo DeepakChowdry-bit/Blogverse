@@ -4,18 +4,43 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        await connect();
+        await connect(); // Connect to MongoDB
 
-        const blogs = await Blog.find({});
+        const blogs = await Blog.find({}); // Fetch blogs
 
-        console.log(blogs)
+        if (!blogs.length) {
+            return NextResponse.json({
+                message: 'No blogs found',
+                success: true,
+                blogs: [],
+            }, {
+                headers: {
+                    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate', // Disable caching
+                    'Pragma': 'no-cache', // HTTP 1.0
+                    'Expires': '0', // Proxies
+                },
+            });
+        }
+
+        // Log the fetched blogs to check the output
+        console.log("Fetched blogs:", blogs);
 
         return NextResponse.json({
-            messgae: 'Blogs fetched successfully',
+            message: 'Blogs fetched successfully',
             success: true,
-            blogs
-        })
+            blogs,
+        }, {
+            headers: {
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate', // Disable caching
+                'Pragma': 'no-cache', // HTTP 1.0
+                'Expires': '0', // Proxies
+            },
+        });
     } catch (err) {
-        return NextResponse.json({ err: 'Internal server error' }, { status: 500 })
+        console.error("Error fetching blogs:", err);
+        return NextResponse.json(
+            { message: 'Internal server error', error: err.message },
+            { status: 500 }
+        );
     }
 }

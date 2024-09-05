@@ -31,6 +31,7 @@ const Feed = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            "Cache-Control": "no-store", // Disable client-side cache
           },
         });
         if (response.ok) {
